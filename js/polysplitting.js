@@ -345,54 +345,48 @@
       }
     }
 
-    // reorder the intersection points based upon distance from start of original path
-    var orderedIntPoints = _orderIntersectionPoints(intersectionPoints);
-    
-    return orderedIntPoints;
+    // exit function and return empty array
+    if (intersectionPoints.length === 0) {
+      return [];
+    }
+
+    // return the intersection points ordered by their distance from the start of original path
+    return _orderIntersectionPoints(intersectionPoints);
 
 
     // private method to order the intersection points
     // first point will be the one closest to the start of the path
     function _orderIntersectionPoints(intersectionPoints) {
-      // declare variables to hold the ordered points
-      var first;
-      var second;
-
-      // get references of the two intersection points 
-      var intPoint0 = intersectionPoints[0];
-      var intPoint1 = intersectionPoints[1];
-
-      // check if the intersection points are on the same original line
-      if (intPoint0.isOnSameLine(intPoint1)) {
-
-        // determine the distance between the intersection points and the start of the original line
-        var point0Distance = google.maps.geometry.spherical.computeDistanceBetween(intPoint0.coordinates, intPoint0.originalLine.startCoords);
-        var point1Distance = google.maps.geometry.spherical.computeDistanceBetween(intPoint1.coordinates, intPoint0.originalLine.startCoords);
-
-        if (point0Distance < point1Distance) {
-          first = intPoint0;
-          second = intPoint1;
+      
+      // return an array sorted by distance from start of the original polygon's path
+      return intersectionPoints.sort(_compare);
+      
+      function _compare(a, b) {
+        // compare each intersection point's original line start index
+        if (a.originalLine.startIndex > b.originalLine.startIndex) {
+          return 1;
         }
-        else {
-          first = intPoint1;
-          second = intPoint0;
+        if (a.originalLine.startIndex < b.originalLine.startIndex) {
+          return -1;
         }
-      }
-      else {
+        // if the intersection points are on the same line
+        if (a.isOnSameLine(b)) {
 
-        // determine which intersection point has lower original line start index
-        if (intPoint0.originalLine.startIndex < intPoint1.originalLine.startIndex) {
-          first = intPoint0;
-          second = intPoint1;
-        }
-        else {
-          first = intPoint1;
-          second = intPoint0;
-        }
-      }
+          // determine the distance between the intersection points and the start of the original line
+          var distanceA = google.maps.geometry.spherical.computeDistanceBetween(a.coordinates, a.originalLine.startCoords);
+          var distanceB = google.maps.geometry.spherical.computeDistanceBetween(b.coordinates, a.originalLine.startCoords);
 
-      // return an array with the ordered points
-      return [first, second]; 
+          if (distanceA > distanceB) {
+            return 1;
+          }
+          if (distanceA < distanceB) {
+            return -1;
+          }
+        }
+
+        // if it makes it to this point they must be equal
+        return 0;
+      } // <-- _compare
 
     } // <-- _orderIntersectionPoints()
 
