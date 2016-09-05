@@ -2,7 +2,7 @@
 A Google Maps JavaScript API v3 library to split an exisiting polygon into two separate polygons.
 
 ## Demo
-Here is a simple [demo page.](http://projects.trentmentink.com/projects/polysplitting)
+Here is a simple [demo page.](http://projects.trentmentink.com/projects/polygon_splitting)
 
 ## Installation
 #### Step 1
