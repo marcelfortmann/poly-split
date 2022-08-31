@@ -796,10 +796,13 @@
     // tests if points rotate counter clockwise
     // returns boolean
     function _CCW(p1, p2, p3) {
-      a = p1.lng(); b = p1.lat();
-      c = p2.lng(); d = p2.lat();
-      e = p3.lng(); f = p3.lat();
-
+      var a = p1.lng(); 
+      var b = p1.lat();
+      var c = p2.lng(); 
+      var d = p2.lat();
+      var e = p3.lng(); 
+      var f = p3.lat();
+      
       return (f - b) * (c - a) > (d - b) * (e - a);
     }
 
